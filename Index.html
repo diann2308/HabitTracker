@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Habit Tracker</title>
+    <title>Theo Dõi Thói Quen</title>
     <link rel="stylesheet" href="Habit_tracker.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>📊 Habit Tracker</h1>
-            <p class="subtitle">Build better habits, one day at a time</p>
+            <h1>📊 Theo Dõi Thói Quen</h1>
+            <p class="subtitle">Xây dựng thói quen tốt hơn mỗi ngày</p>
             <div class="header-actions">
-                <button id="saveBtn" class="save-btn" title="Save all changes">💾 Save</button>
-                <button id="exportBtn" class="export-btn" title="Export as JSON">📥 Export</button>
-                <button id="importBtn" class="import-btn" title="Import from JSON">📤 Import</button>
-                <button id="resetBtn" class="reset-btn" title="Reset all data">🔄 Reset</button>
+                <button id="saveBtn" class="save-btn" title="Lưu tất cả thay đổi">💾 Lưu</button>
+                <button id="exportBtn" class="export-btn" title="Xuất dữ liệu ra file JSON">📥 Xuất</button>
+                <button id="importBtn" class="import-btn" title="Nhập dữ liệu từ file JSON">📤 Nhập</button>
+                <button id="resetBtn" class="reset-btn" title="Xóa toàn bộ dữ liệu">🔄 Đặt lại</button>
                 <input type="file" id="fileInput" accept=".json" style="display: none;">
             </div>
         </header>
@@ -25,46 +25,45 @@
             <input 
                 type="text" 
                 id="habitInput" 
-                placeholder="Enter a new habit (e.g., Exercise, Read, Meditate)" 
+                placeholder="Nhập thói quen mới (VD: Tập thể dục, Đọc sách, Thiền)" 
                 class="habit-input"
             >
             <select id="categorySelect" class="category-select">
-                <option value="health">Health</option>
-                <option value="learning">Learning</option>
-                <option value="productivity">Productivity</option>
-                <option value="wellness">Wellness</option>
-                <option value="other">Other</option>
+                <option value="health">Sức khỏe</option>
+                <option value="learning">Học tập</option>
+                <option value="productivity">Năng suất</option>
+                <option value="wellness">Tinh thần</option>
+                <option value="other">Khác</option>
             </select>
-            <button id="addBtn" class="add-btn">+ Add Habit</button>
+            <button id="addBtn" class="add-btn">+ Thêm thói quen</button>
         </div>
 
         <div class="stats-section">
             <div class="stat-card">
-                <h3>Total Habits</h3>
+                <h3>Tổng số thói quen</h3>
                 <p id="totalHabits" class="stat-number">0</p>
             </div>
             <div class="stat-card">
-                <h3>Completed Today</h3>
+                <h3>Hoàn thành hôm nay</h3>
                 <p id="completedToday" class="stat-number">0</p>
             </div>
             <div class="stat-card">
-                <h3>Current Streak</h3>
+                <h3>Chuỗi hiện tại</h3>
                 <p id="currentStreak" class="stat-number">0</p>
             </div>
             <div class="stat-card">
-                <h3>Weekly Average</h3>
+                <h3>Trung bình tuần</h3>
                 <p id="weeklyAverage" class="stat-number">0%</p>
             </div>
         </div>
 
-        <!-- Charts Section -->
         <div class="charts-container">
             <div class="chart-section">
-                <h2>Progress Analytics (Line Chart)</h2>
+                <h2>Phân tích tiến độ (Biểu đồ đường)</h2>
                 <div class="chart-controls">
-                    <button class="chart-btn active" data-range="7">7 Days</button>
-                    <button class="chart-btn" data-range="14">14 Days</button>
-                    <button class="chart-btn" data-range="30">30 Days</button>
+                    <button class="chart-btn active" data-range="7">7 Ngày</button>
+                    <button class="chart-btn" data-range="14">14 Ngày</button>
+                    <button class="chart-btn" data-range="30">30 Ngày</button>
                 </div>
                 <div class="chart-container">
                     <canvas id="progressChart"></canvas>
@@ -72,105 +71,99 @@
             </div>
 
             <div class="chart-section">
-                <h2>Today's Completion (Pie Chart)</h2>
+                <h2>Mức độ hoàn thành hôm nay (Biểu đồ tròn)</h2>
                 <div class="chart-container-pie">
                     <canvas id="completionChart"></canvas>
                 </div>
                 <div class="chart-legend">
-                    <span class="legend-item completed">✓ Completed</span>
-                    <span class="legend-item pending">◯ Pending</span>
+                    <span class="legend-item completed">✓ Đã xong</span>
+                    <span class="legend-item pending">◯ Chờ xử lý</span>
                 </div>
             </div>
         </div>
 
-        <!-- Reminders Section -->
         <div class="reminders-section">
-            <h2>⏰ Quick Actions</h2>
+            <h2>⏰ Thao tác nhanh</h2>
             <div class="quick-actions">
-                <button id="completeAllBtn" class="quick-action-btn primary">✓ Complete All Today</button>
-                <button id="resetTodayBtn" class="quick-action-btn secondary">Reset Today's Progress</button>
-                <button id="sortBtn" class="quick-action-btn tertiary">Sort by Streak</button>
+                <button id="completeAllBtn" class="quick-action-btn primary">✓ Hoàn thành tất cả hôm nay</button>
+                <button id="resetTodayBtn" class="quick-action-btn secondary">Đặt lại tiến độ hôm nay</button>
+                <button id="sortBtn" class="quick-action-btn tertiary">Sắp xếp theo chuỗi</button>
             </div>
         </div>
 
-        <!-- Search/Filter Section -->
         <div class="filter-section">
             <input 
                 type="text" 
                 id="searchInput" 
-                placeholder="🔍 Search habits..." 
+                placeholder="🔍 Tìm kiếm thói quen..." 
                 class="search-input"
             >
             <select id="categoryFilter" class="category-filter">
-                <option value="all">All Categories</option>
-                <option value="health">Health</option>
-                <option value="learning">Learning</option>
-                <option value="productivity">Productivity</option>
-                <option value="wellness">Wellness</option>
-                <option value="other">Other</option>
+                <option value="all">Tất cả danh mục</option>
+                <option value="health">Sức khỏe</option>
+                <option value="learning">Học tập</option>
+                <option value="productivity">Năng suất</option>
+                <option value="wellness">Tinh thần</option>
+                <option value="other">Khác</option>
             </select>
         </div>
 
         <div class="habits-section">
-            <h2>Your Habits</h2>
+            <h2>Thói quen của bạn</h2>
             <div id="habitsList" class="habits-list">
-                <p class="empty-message">No habits yet. Add one to get started!</p>
+                <p class="empty-message">Chưa có thói quen nào. Hãy thêm một thói quen để bắt đầu!</p>
             </div>
         </div>
 
-        <!-- Statistics Section -->
         <div class="insights-section">
-            <h2>📈 Insights</h2>
+            <h2>📈 Thống kê chi tiết</h2>
             <div class="insights-grid">
                 <div class="insight-card">
-                    <h3>Most Consistent</h3>
+                    <h3>Kiên trì nhất</h3>
                     <p id="mostConsistent" class="insight-value">-</p>
                 </div>
                 <div class="insight-card">
-                    <h3>Total Completions</h3>
+                    <h3>Tổng số lần hoàn thành</h3>
                     <p id="totalCompletions" class="insight-value">0</p>
                 </div>
                 <div class="insight-card">
-                    <h3>Best Day</h3>
+                    <h3>Ngày hiệu quả nhất</h3>
                     <p id="bestDay" class="insight-value">-</p>
                 </div>
                 <div class="insight-card">
-                    <h3>Success Rate</h3>
+                    <h3>Tỷ lệ thành công</h3>
                     <p id="successRate" class="insight-value">0%</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Notification Toast -->
     <div id="toast" class="toast"></div>
 
-    <!-- Floating Action Button -->
-    <button id="helpBtn" class="fab" title="Help">?</button>
+    <button id="helpBtn" class="fab" title="Trợ giúp">?</button>
 
-    <!-- Help Modal -->
     <div id="helpModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>📖 How to Use Habit Tracker</h2>
+            <h2>📖 Cách sử dụng ứng dụng</h2>
             <div class="help-content">
-                <h3>Getting Started</h3>
-                <p>1. Enter a habit name and select a category</p>
-                <p>2. Click "+ Add Habit" to create it</p>
-                <p>3. Mark habits complete each day by clicking "Mark Done"</p>
+                <h3>Bắt đầu</h3>
+                <p>1. Nhập tên thói quen và chọn danh mục.</p>
+                <p>2. Bấm "+ Thêm thói quen" để tạo mới.</p>
+                <p>3. Đánh dấu hoàn thành mỗi ngày bằng cách bấm nút tương ứng trên thói quen đó.</p>
 
-                <h3>Features</h3>
-                <p><strong>Save:</strong> Manually save your data</p>
-                <p><strong>Export:</strong> Download your habits as backup</p>
-                <p><strong>Import:</strong> Restore from backup</p>
-                <p><strong>Analytics:</strong> View your progress with charts</p>
-                <p><strong>Search:</strong> Find habits quickly</p>
+                <h3>Các tính năng</h3>
+                <p><strong>Lưu:</strong> Lưu lại dữ liệu của bạn thủ công.</p>
+                <p><strong>Xuất:</strong> Tải file dữ liệu về máy để sao lưu.</p>
+                <p><strong>Nhập:</strong> Khôi phục dữ liệu từ bản sao lưu cũ.</p>
+                <p><strong>Phân tích:</strong> Xem biểu đồ tiến độ để đánh giá hiệu quả.</p>
+                <p><strong>Tìm kiếm:</strong> Tìm nhanh thói quen theo tên hoặc bộ lọc danh mục.</p>
 
-                <h3>Tips</h3>
-                <p>✓ Complete all habits to build momentum</p>
-                <p>✓ Keep your streak going every day</p>
-                <p>✓ Use categories to organize habits</p>
-                <p>✓ Export regularly for safety</p>
+                <h3>Mẹo hay</h3>
+                <p>✓ Hoàn thành tất cả thói quen để tạo động lực.</p>
+                <p>✓ Cố gắng duy trì chuỗi ngày liên tục.</p>
+                <p>✓ Sử dụng danh mục để quản lý cho gọn gàng.</p>
+                <p>✓ Thường xuyên "Xuất" dữ liệu ra file để tránh mất mát.</p>
             </div>
         </div>
     </div>
