@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Tracker</title>
+    <link rel="stylesheet" href="Habit_tracker.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Habit Tracker</h1>
+            <p class="subtitle">Build better habits, one day at a time</p>
+            <div class="header-actions">
+                <button id="saveBtn" class="save-btn" title="Save all changes">💾 Save</button>
+                <button id="exportBtn" class="export-btn" title="Export as JSON">📥 Export</button>
+                <button id="importBtn" class="import-btn" title="Import from JSON">📤 Import</button>
+                <button id="resetBtn" class="reset-btn" title="Reset all data">🔄 Reset</button>
+                <input type="file" id="fileInput" accept=".json" style="display: none;">
+            </div>
+        </header>
+
+        <div class="input-section">
+            <input 
+                type="text" 
+                id="habitInput" 
+                placeholder="Enter a new habit (e.g., Exercise, Read, Meditate)" 
+                class="habit-input"
+            >
+            <select id="categorySelect" class="category-select">
+                <option value="health">Health</option>
+                <option value="learning">Learning</option>
+                <option value="productivity">Productivity</option>
+                <option value="wellness">Wellness</option>
+                <option value="other">Other</option>
+            </select>
+            <button id="addBtn" class="add-btn">+ Add Habit</button>
+        </div>
+
+        <div class="stats-section">
+            <div class="stat-card">
+                <h3>Total Habits</h3>
+                <p id="totalHabits" class="stat-number">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Completed Today</h3>
+                <p id="completedToday" class="stat-number">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Current Streak</h3>
+                <p id="currentStreak" class="stat-number">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Weekly Average</h3>
+                <p id="weeklyAverage" class="stat-number">0%</p>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-container">
+            <div class="chart-section">
+                <h2>Progress Analytics (Line Chart)</h2>
+                <div class="chart-controls">
+                    <button class="chart-btn active" data-range="7">7 Days</button>
+                    <button class="chart-btn" data-range="14">14 Days</button>
+                    <button class="chart-btn" data-range="30">30 Days</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="progressChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-section">
+                <h2>Today's Completion (Pie Chart)</h2>
+                <div class="chart-container-pie">
+                    <canvas id="completionChart"></canvas>
+                </div>
+                <div class="chart-legend">
+                    <span class="legend-item completed">✓ Completed</span>
+                    <span class="legend-item pending">◯ Pending</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reminders Section -->
+        <div class="reminders-section">
+            <h2>⏰ Quick Actions</h2>
+            <div class="quick-actions">
+                <button id="completeAllBtn" class="quick-action-btn primary">✓ Complete All Today</button>
+                <button id="resetTodayBtn" class="quick-action-btn secondary">Reset Today's Progress</button>
+                <button id="sortBtn" class="quick-action-btn tertiary">Sort by Streak</button>
+            </div>
+        </div>
+
+        <!-- Search/Filter Section -->
+        <div class="filter-section">
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="🔍 Search habits..." 
+                class="search-input"
+            >
+            <select id="categoryFilter" class="category-filter">
+                <option value="all">All Categories</option>
+                <option value="health">Health</option>
+                <option value="learning">Learning</option>
+                <option value="productivity">Productivity</option>
+                <option value="wellness">Wellness</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+
+        <div class="habits-section">
+            <h2>Your Habits</h2>
+            <div id="habitsList" class="habits-list">
+                <p class="empty-message">No habits yet. Add one to get started!</p>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="insights-section">
+            <h2>📈 Insights</h2>
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <h3>Most Consistent</h3>
+                    <p id="mostConsistent" class="insight-value">-</p>
+                </div>
+                <div class="insight-card">
+                    <h3>Total Completions</h3>
+                    <p id="totalCompletions" class="insight-value">0</p>
+                </div>
+                <div class="insight-card">
+                    <h3>Best Day</h3>
+                    <p id="bestDay" class="insight-value">-</p>
+                </div>
+                <div class="insight-card">
+                    <h3>Success Rate</h3>
+                    <p id="successRate" class="insight-value">0%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Floating Action Button -->
+    <button id="helpBtn" class="fab" title="Help">?</button>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>📖 How to Use Habit Tracker</h2>
+            <div class="help-content">
+                <h3>Getting Started</h3>
+                <p>1. Enter a habit name and select a category</p>
+                <p>2. Click "+ Add Habit" to create it</p>
+                <p>3. Mark habits complete each day by clicking "Mark Done"</p>
+
+                <h3>Features</h3>
+                <p><strong>Save:</strong> Manually save your data</p>
+                <p><strong>Export:</strong> Download your habits as backup</p>
+                <p><strong>Import:</strong> Restore from backup</p>
+                <p><strong>Analytics:</strong> View your progress with charts</p>
+                <p><strong>Search:</strong> Find habits quickly</p>
+
+                <h3>Tips</h3>
+                <p>✓ Complete all habits to build momentum</p>
+                <p>✓ Keep your streak going every day</p>
+                <p>✓ Use categories to organize habits</p>
+                <p>✓ Export regularly for safety</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="Habit_tracker.js"></script>
+</body>
+</html>
